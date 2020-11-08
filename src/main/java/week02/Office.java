@@ -23,7 +23,7 @@ public class Office {
         }
     }
 
-    public void printEvenNames() {
+    public void printEventNames() {
         for (int i = 1; i < meetingRooms.size(); i += 2) {
             System.out.println(meetingRooms.get(i).getName());
         }

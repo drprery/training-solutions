@@ -58,7 +58,7 @@ public class Controller {
                     printMenu();
                     break;
                 case 3:
-                    office.printEvenNames();
+                    office.printEventNames();
                     System.out.println();
                     printMenu();
                     break;
