@@ -93,6 +93,10 @@ public class Controller {
                     break;
                 case 8:
                     quit = true;
+                    break;
+                default:
+                    System.out.println("Nincs ilyen funkció! Kérem újra!");
+                    System.out.println();
             }
         }
         System.exit(1);

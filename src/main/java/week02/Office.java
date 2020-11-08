@@ -40,40 +40,37 @@ public class Office {
     }
 
     public void printMeetingRoomsWithName(String name) {
-        boolean found = false;
-        int index = 0;
-        while (!found && (index < meetingRooms.size())) {
-            MeetingRoom mRoom = meetingRooms.get(index);
-            index++;
-            if (mRoom.getName().equals(name)) {
+        boolean isFound = false;
+
+        for(MeetingRoom mRoom: meetingRooms){
+            if (mRoom.getName().toLowerCase().equals(name.toLowerCase())){
+                System.out.println("A keresett tárgyaló teljes neve: " + mRoom.getName());
                 System.out.println("A keresett tárgyaló szélessége: " + mRoom.getWidth());
                 System.out.println("A keresett tárgyaló hosszúsága: " + mRoom.getLength());
                 System.out.println("A keresett tárgyaló területe: " + mRoom.getArea());
-                found = true;
+                isFound = true;
             }
         }
-        if(!found) {
-            System.out.println("Nincs ilyen nevű terem!");
+        if (!isFound){
+            System.out.println("Nincs megfelelő nevű terem!");
         }
         System.out.println();
     }
 
     public void printMeetingRoomsContains(String part) {
-        boolean found = false;
-        int index = 0;
-        while (!found && (index < meetingRooms.size())) {
-            MeetingRoom mRoom = meetingRooms.get(index);
-            index++;
-            if ((mRoom.getName().toLowerCase().indexOf(part.toLowerCase())) >= 0) {
+        boolean isFound = false;
+
+        for(MeetingRoom mRoom: meetingRooms){
+            if (mRoom.getName().toLowerCase().indexOf(part.toLowerCase()) >= 0){
                 System.out.println("A keresett tárgyaló teljes neve: " + mRoom.getName());
                 System.out.println("A keresett tárgyaló szélessége: " + mRoom.getWidth());
                 System.out.println("A keresett tárgyaló hosszúsága: " + mRoom.getLength());
                 System.out.println("A keresett tárgyaló területe: " + mRoom.getArea());
-                found = true;
+                isFound = true;
             }
         }
-        if(!found) {
-            System.out.println("Nincs ilyen nevű terem!");
+        if (!isFound){
+            System.out.println("Nincs megfelelő nevű terem!");
         }
         System.out.println();
     }
