@@ -66,6 +66,7 @@ public class Office {
                 System.out.println("A keresett tárgyaló szélessége: " + mRoom.getWidth());
                 System.out.println("A keresett tárgyaló hosszúsága: " + mRoom.getLength());
                 System.out.println("A keresett tárgyaló területe: " + mRoom.getArea());
+                System.out.println();
                 isFound = true;
             }
         }
