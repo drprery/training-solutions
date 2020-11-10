@@ -6,7 +6,7 @@ public class PrimitiveTypes {
 
     public String toBinaryString(int n) {
         String s = "";
-        for (int number = Math.abs(n); number > 0; ) {
+        for (int number = n; number > 0; ) {
             int bit = number % 2;
             s = bit + "" + s;
             number = number / 2;
