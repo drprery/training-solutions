@@ -6,7 +6,7 @@ public class Mark {
     private Tutor tutor;
 
     public Mark(MarkType markType, Subject subject, Tutor tutor) {
-        if(subject==null && tutor==null){
+        if(subject==null || tutor==null){
             throw new NullPointerException("Both subject and tutor must be provided!");
         }
         this.markType = markType;

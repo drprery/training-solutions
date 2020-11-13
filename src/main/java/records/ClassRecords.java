@@ -63,10 +63,12 @@ public class ClassRecords {
         double markValueSum = 0.0;
         int markNum=0;
         for (Student student : students) {
-            markValueSum += student.calculateSubjectAverage(subject);
-            markNum++;
+            if(student.calculateSubjectAverage(subject)>0) {
+                markValueSum += student.calculateSubjectAverage(subject);
+                markNum++;
+            }
         }
-        return markValueSum / markNum;
+        return ((int)((markValueSum / markNum)*100))/100.0;
     }
 
     public Student findStudentByName(String name){
@@ -78,18 +80,16 @@ public class ClassRecords {
         }
 
         Student foundStudent=null;
-        boolean found=false;
         for(Student student:students){
             if(student.getName().equals(name)){
-                found=true;
                 foundStudent=student;
                 break;
             }
         }
-        if(found){
-            return foundStudent;
-        } else {
+        if(foundStudent==null){
             throw new IllegalArgumentException("Student by this name cannot be found! "+name);
+        } else {
+            return foundStudent;
         }
     }
 
@@ -115,7 +115,7 @@ public class ClassRecords {
         for(Student student:students){
             studentNames+=student.getName()+", ";
         }
-        return studentNames;
+        return studentNames.substring(0,studentNames.length()-2);
     }
 
     private boolean isEmpty(String name){

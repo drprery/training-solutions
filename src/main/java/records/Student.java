@@ -8,7 +8,7 @@ public class Student {
     private String name;
 
     public Student(String name) {
-        if(isEmpty(name)){
+        if (isEmpty(name)) {
             throw new IllegalArgumentException("Student name must not be empty!");
         }
         this.name = name;
@@ -23,23 +23,24 @@ public class Student {
         for (Mark mark : marks) {
             markValueSum += mark.getMarkType().getValue();
         }
-        return markValueSum / marks.size();
+        return ((int) ((markValueSum / marks.size()) * 100)) / 100.0;
     }
 
     public double calculateSubjectAverage(Subject subject) {
         double markValueSum = 0.0;
-        int markNum=0;
+        int markNum = 0;
         for (Mark mark : marks) {
-            if(mark.getSubject().getSubjectName().equals(subject.getSubjectName())){
+            if (mark.getSubject().getSubjectName().equals(subject.getSubjectName())) {
                 markValueSum += mark.getMarkType().getValue();
                 markNum++;
             }
         }
-        return markValueSum / markNum;
+        //return markValueSum / markNum;
+        return ((int) ((markValueSum / markNum) * 100)) / 100.0;
     }
 
     public void grading(Mark mark) {
-        if(mark==null){
+        if (mark == null) {
             throw new NullPointerException("Mark must not be null!");
         }
         marks.add(mark);
@@ -51,6 +52,7 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Kovács marks: matematika: excellent(5)";
+        MarkType markType = marks.get(0).getMarkType();
+        return getName() + " marks: " + marks.get(0).getSubject().getSubjectName() + ": " + markType.getDescription() + "(" + markType.getValue() + ")";
     }
 }
