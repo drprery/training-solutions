@@ -17,6 +17,7 @@ public class Tutor {
         for(Subject sub:taughtSubjects){
             if(sub.getSubjectName().equals(subject.getSubjectName())){
                 found=true;
+                break;
             }
         }
         return found;
