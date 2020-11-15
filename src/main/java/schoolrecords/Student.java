@@ -23,7 +23,7 @@ public class Student {
         for (Mark mark : marks) {
             markValueSum += mark.getMarkType().getValue();
         }
-        return (Math.round (((markValueSum / marks.size()) * 100))) / 100.0;
+        return Math.round (((markValueSum / marks.size()) * 100)) / 100.0;
     }
 
     public double calculateSubjectAverage(Subject subject) {
@@ -36,7 +36,7 @@ public class Student {
             }
         }
         //return markValueSum / markNum;
-        return ((int) ((markValueSum / markNum) * 100)) / 100.0;
+        return Math.round (((markValueSum / markNum) * 100)) / 100.0;
     }
 
     public void grading(Mark mark) {
