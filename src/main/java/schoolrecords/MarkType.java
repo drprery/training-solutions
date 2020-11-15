@@ -1,4 +1,4 @@
-package records;
+package schoolrecords;
 
 public enum MarkType {
     A(5, "excellent"),

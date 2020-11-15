@@ -1,4 +1,4 @@
-package records;
+package schoolrecords;
 
 
 import org.junit.jupiter.api.Test;

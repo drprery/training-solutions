@@ -1,4 +1,4 @@
-package records;
+package schoolrecords;
 
 public class Mark {
     private MarkType markType;
