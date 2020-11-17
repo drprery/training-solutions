@@ -56,7 +56,8 @@ public class ClassRecords {
             }
             markValueSum += student.calculateAverage();
         }
-        return Math.round((markValueSum / students.size())*100)/100.0;
+        //return Math.round((markValueSum / students.size())*100)/100.0;
+        return Double.parseDouble(String.format("%.2f",markValueSum / students.size()));
     }
 
     public double calculateClassAverageBySubject(Subject subject){
@@ -68,7 +69,7 @@ public class ClassRecords {
                 markNum++;
             }
         }
-        return Math.round((markValueSum / markNum)*100)/100.0;
+        return Double.parseDouble(String.format("%.2f",markValueSum / markNum));
     }
 
     public Student findStudentByName(String name){
