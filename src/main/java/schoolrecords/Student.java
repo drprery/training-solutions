@@ -59,7 +59,13 @@ public class Student {
 
     @Override
     public String toString() {
-        MarkType markType = marks.get(0).getMarkType();
-        return getName() + " marks: " + marks.get(0).getSubject().getSubjectName() + ": " + markType.getDescription() + "(" + markType.getValue() + ")";
+        String repr = getName();
+
+        for (Mark mark : marks) {
+            repr+=" marks: " + mark.getSubject().getSubjectName() + ": " + mark.getMarkType().getDescription() + "(" + mark.getMarkType().getValue() + ")\n"+" ".repeat(getName().length());
+        }
+        repr=repr.substring(0,repr.length()-(1+ getName().length()));
+
+        return repr;
     }
 }
