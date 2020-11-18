@@ -2,6 +2,7 @@ package schoolrecords;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 public class ClassRecords {
@@ -57,7 +58,7 @@ public class ClassRecords {
             markValueSum += student.calculateAverage();
         }
         //return Math.round((markValueSum / students.size())*100)/100.0;
-        return Double.parseDouble(String.format("%.2f",markValueSum / students.size()));
+        return Double.parseDouble(String.format(Locale.US, "%.2f",markValueSum / students.size()));
     }
 
     public double calculateClassAverageBySubject(Subject subject){
@@ -69,7 +70,7 @@ public class ClassRecords {
                 markNum++;
             }
         }
-        return Double.parseDouble(String.format("%.2f",markValueSum / markNum));
+        return Double.parseDouble(String.format(Locale.US,"%.2f",markValueSum / markNum));
     }
 
     public Student findStudentByName(String name){
@@ -120,6 +121,6 @@ public class ClassRecords {
     }
 
     private boolean isEmpty(String name){
-        return "".equals(name);
+        return "".equals(name) || name==null;
     }
 }

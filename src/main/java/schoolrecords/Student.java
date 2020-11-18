@@ -2,6 +2,7 @@ package schoolrecords;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Student {
     private List<Mark> marks = new ArrayList<>();
@@ -24,7 +25,7 @@ public class Student {
             markValueSum += mark.getMarkType().getValue();
         }
         if (marks.size() > 0) {
-            return Double.parseDouble(String.format("%.2f", markValueSum / marks.size()));
+            return Double.parseDouble(String.format(Locale.US, "%.2f", markValueSum / marks.size()));
         } else {
             return 0.0;
         }
@@ -40,7 +41,7 @@ public class Student {
             }
         }
         if (marks.size() > 0 && markNum > 0) {
-            return Double.parseDouble(String.format("%.2f", markValueSum / markNum));
+            return Double.parseDouble(String.format(Locale.US, "%.2f", markValueSum / markNum));
         } else {
             return 0.0;
         }
