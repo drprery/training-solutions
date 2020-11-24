@@ -65,7 +65,7 @@ public class Student {
         for (Mark mark : marks) {
             repr+=" marks: " + mark.getSubject().getSubjectName() + ": " + mark.getMarkType().getDescription() + "(" + mark.getMarkType().getValue() + ")\n"+" ".repeat(getName().length());
         }
-        repr=repr.substring(0,repr.length()-(1+ getName().length()));
+        repr=repr.substring(0,repr.length()-(getName().length()+1));
 
         return repr;
     }
