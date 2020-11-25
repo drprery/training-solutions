@@ -1,6 +1,8 @@
 package week05d02;
 
 public class ChangeLetter {
+    public static final String CHARS="aeiou";
+
     public String changeVowels(String str){
             String temp="";
 
@@ -8,11 +10,14 @@ public class ChangeLetter {
                 throw new IllegalArgumentException("Incorrect parameter string!");
             }
 
-            temp=str.replace("a","*");
-            temp=temp.replace("e","*");
-            temp=temp.replace("i","*");
-            temp=temp.replace("o","*");
-            temp=temp.replace("u","*");
+            for(int i=0;i<str.length();i++) {
+                if (CHARS.contains(str.substring(i, i + 1))) {
+                    temp = temp + "*";
+                } else {
+                    temp = temp + str.substring(i, i + 1);
+                }
+            }
+
         return temp;
     }
 }
