@@ -8,8 +8,8 @@ public class ListCounter {
         char letter=' ';
 
         for(String word:words){
-            letter=word.charAt(0);
-            if(letter=='A' || letter=='a'){
+            letter=word.toLowerCase().charAt(0);
+            if(letter=='a'){
                 count++;
             }
         }
