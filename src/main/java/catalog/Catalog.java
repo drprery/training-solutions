@@ -48,9 +48,13 @@ public class Catalog {
     public List<CatalogItem> findByCriteria(SearchCriteria searchCriteria) {
         List<CatalogItem> items = new ArrayList<>();
 
-        criteriaBoth(searchCriteria, items);
-        criteriaContributor(searchCriteria, items);
-        criteriaTitle(searchCriteria, items);
+        if (searchCriteria.hasContributor() && !(searchCriteria.hasTitle())) {
+            criteriaContributor(searchCriteria.getContributor(), items);
+        } else if (searchCriteria.hasTitle() && !(searchCriteria.hasContributor())) {
+            criteriaTitle(searchCriteria.getTitle(), items);
+        } else if (searchCriteria.hasContributor() && searchCriteria.hasTitle()) {
+            criteriaBoth(searchCriteria.getContributor(), searchCriteria.getTitle(), items);
+        }
 
         return items;
     }
@@ -99,47 +103,38 @@ public class Catalog {
         return printedLibraryItems;
     }
 
-    private List<CatalogItem> criteriaBoth(SearchCriteria searchCriteria, List<CatalogItem> items) {
-        if (searchCriteria.hasContributor() && searchCriteria.hasTitle()) {
-            List<String> contribs = new ArrayList<>();
-            List<String> titles = new ArrayList<>();
+    private void criteriaBoth(String contributor, String title, List<CatalogItem> items) {
+        List<String> contribs;
+        List<String> titles;
 
-            for (CatalogItem catalogItem : catalogItems) {
-                contribs = catalogItem.getContributors();
-                titles = catalogItem.getTitles();
-                if ((contribs.contains(searchCriteria.getContributor()) && titles.contains(searchCriteria.getTitle()))) {
-                    items.add(catalogItem);
-                }
+        for (CatalogItem catalogItem : catalogItems) {
+            contribs = catalogItem.getContributors();
+            titles = catalogItem.getTitles();
+            if (contribs.contains(contributor) && titles.contains(title)) {
+                items.add(catalogItem);
             }
         }
-        return items;
     }
 
-    private List<CatalogItem> criteriaContributor(SearchCriteria searchCriteria, List<CatalogItem> items) {
-        if (searchCriteria.hasContributor() && !(searchCriteria.hasTitle())) {
-            List<String> contributors;
+    private void criteriaContributor(String contributor, List<CatalogItem> items) {
+        List<String> contributors;
 
-            for (CatalogItem catalogItem : catalogItems) {
-                contributors = catalogItem.getContributors();
-                if (contributors.contains(searchCriteria.getContributor())) {
-                    items.add(catalogItem);
-                }
+        for (CatalogItem catalogItem : catalogItems) {
+            contributors = catalogItem.getContributors();
+            if (contributors.contains(contributor)) {
+                items.add(catalogItem);
             }
         }
-        return items;
     }
 
-    private List<CatalogItem> criteriaTitle(SearchCriteria searchCriteria, List<CatalogItem> items) {
-        if (searchCriteria.hasTitle() && !(searchCriteria.hasContributor())) {
-            List<String> titles;
+    private void criteriaTitle(String title, List<CatalogItem> items) {
+        List<String> titles;
 
-            for (CatalogItem catalogItem : catalogItems) {
-                titles = catalogItem.getTitles();
-                if (titles.contains(searchCriteria.getTitle())) {
-                    items.add(catalogItem);
-                }
+        for (CatalogItem catalogItem : catalogItems) {
+            titles = catalogItem.getTitles();
+            if (titles.contains(title)) {
+                items.add(catalogItem);
             }
         }
-        return items;
     }
 }
