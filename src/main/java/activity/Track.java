@@ -1,5 +1,9 @@
 package activity;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,5 +100,29 @@ public class Track {
 
     public List<TrackPoint> getTrackPoints() {
         return trackPoints;
+    }
+
+    public void loadFromGpx(InputStream is){
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+            String line;
+            String newLine;
+            double lat=0.0;
+            double lon=0.0;
+            double ele=0.0;
+
+            while((line = reader.readLine()) != null) {
+                if(line.contains("<trkpt")){
+                    lat=Double.parseDouble(line.substring(line.indexOf("lat="+5),line.indexOf("lat=")+15));
+                    lon=Double.parseDouble(line.substring(line.indexOf("lon="+5),line.indexOf("lon=")+15));
+                    newLine=reader.readLine();
+                    ele=Double.parseDouble(newLine.substring(newLine.indexOf("<ele")+5,newLine.indexOf("<ele")+10));
+                    trackPoints.add(new TrackPoint(new Coordinate(lat, lon), ele));
+                }
+
+            }
+        }
+        catch (IOException ioe) {
+            throw new IllegalStateException("Can not read file", ioe);
+        }
     }
 }
