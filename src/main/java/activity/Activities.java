@@ -31,26 +31,26 @@ public class Activities {
     }
 
     public int numberOfTrackActivities() {
-        int sumOfTrackActivies = 0;
+        int sumOfTrackActivities = 0;
 
         for (Activity activity : activities) {
             if (activity.getType() != ActivityType.BASKETBALL) {
-                sumOfTrackActivies++;
+                sumOfTrackActivities++;
             }
         }
 
-        return sumOfTrackActivies;
+        return sumOfTrackActivities;
     }
 
     public int numberOfWithoutTrackActivities() {
-        int sumOfWithoutTrackActivies = 0;
+        int sumOfWithoutTrackActivities = 0;
 
         for (Activity activity : activities) {
             if (activity.getType() == ActivityType.BASKETBALL) {
-                sumOfWithoutTrackActivies++;
+                sumOfWithoutTrackActivities++;
             }
         }
 
-        return sumOfWithoutTrackActivies;
+        return sumOfWithoutTrackActivities;
     }
 }
