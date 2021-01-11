@@ -16,16 +16,16 @@ public class Activities {
 
     public List<Report> distancesByTypes() {
         List<Report> report = new ArrayList<>();
-        double[] dist=new double[4];
+        ActivityType[] activityTypes = ActivityType.values();
+        double[] dist=new double[activityTypes.length];
 
         for (Activity activity : activities) {
             dist[activity.getType().ordinal()] += activity.getDistance();
         }
 
-        report.add(new Report(ActivityType.BIKING, dist[0]));
-        report.add(new Report(ActivityType.HIKING, dist[1]));
-        report.add(new Report(ActivityType.RUNNING, dist[2]));
-        report.add(new Report(ActivityType.BASKETBALL, dist[3]));
+        for(ActivityType activityType : activityTypes){
+            report.add(new Report(activityType, dist[activityType.ordinal()]));
+        }
 
         return report;
     }
