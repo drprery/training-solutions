@@ -2,7 +2,6 @@ package iostringwriter.longwords;
 
 import java.io.Writer;
 import java.util.List;
-import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.IOException;
 
@@ -20,16 +19,15 @@ public class LongWordService {
     }
 
     public void longWordProcess(Writer writer, List<String> longWords){
-        PrintWriter pw=new PrintWriter(writer);
 
         for(String s:longWords){
-            pw.print(s);
-            pw.print(":");
-            pw.println(s.length());
+            try {
+                writer.write(s);
+                writer.write(":");
+                writer.write(s.length()+"\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
-
-
-
-
 }
