@@ -1,8 +1,7 @@
-package week02;
+package meetingrooms;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Office {
     private List<MeetingRoom> meetingRooms = new ArrayList<>();
