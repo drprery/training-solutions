@@ -53,62 +53,81 @@ public class Company {
     }
 
     public List<ReportLine> calculateProjectByNameYearMonth(String employee, int year, int month) {
-        int i=0;
-        boolean found = false;
         List<TimeSheetItem> filteredTSItemsByName;
         List<ReportLine> report = new ArrayList<>();
-        Map<String,Integer> pPairs=new HashMap<>();
+        Map<String, Integer> pPairs = new HashMap<>();
 
+        if (!validEmployee(employee)) {
+            throw new IllegalArgumentException();
+        }
+
+        int i = 0;
         for (Project project : projects) {
             report.add(new ReportLine(project, 0L));
             pPairs.put(project.getName(), i++);
         }
 
-        for (Employee employee1 : employees) {
-            if (employee1.getName().equals(employee)) {
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            throw new IllegalArgumentException();
-        }
-
-        filteredTSItemsByName = timeSheetItems.stream().filter((timeSheetItem) ->
-                timeSheetItem.getEmployee().getName().equals(employee) &&
-                timeSheetItem.getBeginDate().getYear() == year &&
-                timeSheetItem.getBeginDate().getMonthValue() == month).collect(Collectors.toList());
+        filteredTSItemsByName = filterList(timeSheetItems, employee, year, month);
 
         for (TimeSheetItem timeSheetItem : filteredTSItemsByName) {
-            String pName=timeSheetItem.getProject().getName();
+            String pName = timeSheetItem.getProject().getName();
             report.get(pPairs.get(pName)).addTime(timeSheetItem.hoursBetweenDates());
         }
         return report;
     }
 
-    public void printToFile(String name, int year, int month, Path report){
-        String rLine = name+"\t"+year+"-"+String.format("%02d",month)+"\t";
+    public void printToFile(String name, int year, int month, Path report) {
+        String rLine = name + "\t" + year + "-" + String.format("%02d", month) + "\t";
         List<ReportLine> reportLines;
-        int totalHours=0;
+        int totalHours = 0;
 
-        reportLines=calculateProjectByNameYearMonth(name, year, month);
-        for(ReportLine reportLine : reportLines){
-            totalHours+=reportLine.getTime();
+        reportLines = calculateProjectByNameYearMonth(name, year, month);
+        for (ReportLine reportLine : reportLines) {
+            totalHours += reportLine.getTime();
         }
 
-        rLine+=totalHours+"\n";
+        rLine += totalHours + "\n";
 
-        for(ReportLine reportLine : reportLines){
-            if(reportLine.getTime()!=0){
-                rLine+=reportLine.getProject().getName()+"\t"+
-                        reportLine.getTime()+"\n";
+        for (ReportLine reportLine : reportLines) {
+            if (reportLine.getTime() != 0) {
+                rLine += reportLine.getProject().getName() + "\t" +
+                        reportLine.getTime() + "\n";
             }
         }
 
-        try{
+        try {
             Files.writeString(report, rLine);
         } catch (IOException ioe) {
             throw new IllegalStateException();
         }
+    }
+
+    private boolean validEmployee(String testEmployee) {
+        boolean found = false;
+        for (Employee employee1 : employees) {
+            if (employee1.getName().equals(testEmployee)) {
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
+
+    private List<TimeSheetItem> filterList(List<TimeSheetItem> timeSheetItems, String employee, int year, int month){
+        List<TimeSheetItem> filteredTSItemsByName=new ArrayList<>();
+
+        /*for(TimeSheetItem timeSheetItem : timeSheetItems){
+            if( timeSheetItem.getEmployee().getName().equals(employee) &&
+                    timeSheetItem.getBeginDate().getYear() == year &&
+                    timeSheetItem.getBeginDate().getMonthValue() == month){
+                filteredTSItemsByName.add(timeSheetItem);
+            }
+        }*/
+        filteredTSItemsByName = timeSheetItems.stream().filter((timeSheetItem) ->
+                timeSheetItem.getEmployee().getName().equals(employee) &&
+                        timeSheetItem.getBeginDate().getYear() == year &&
+                        timeSheetItem.getBeginDate().getMonthValue() == month).collect(Collectors.toList());
+
+        return filteredTSItemsByName;
     }
 }
