@@ -18,7 +18,7 @@ public class Library {
     public void saveBooks(Path path){
         try(BufferedWriter bw = Files.newBufferedWriter(path)){
             for(Book book:books){
-                bw.write(book.getAuthor()+";"+book.getTitle());
+                bw.write(book.getAuthor()+";"+book.getTitle()+"\n");
             }
         } catch (IOException ioe){
             throw new IllegalStateException("File couldn't be created!", ioe);
@@ -34,5 +34,9 @@ public class Library {
         } catch (IOException ioe){
             throw new IllegalStateException("File couldn't be read!", ioe);
         }
+    }
+
+    public List<Book> getBooks() {
+        return books;
     }
 }
