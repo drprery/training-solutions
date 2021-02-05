@@ -2,14 +2,16 @@ package week14d05;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 
 public class CountWords {
     public Map<String, Integer> countWords(String... words){
         Map<String, Integer> wordsMap = new HashMap<>();
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(CountWords.class.getResourceAsStream("hachiko.srt")))) {
+        try (BufferedReader br = Files.newBufferedReader(Path.of("hachiko.srt"), Charset.defaultCharset())) {
             String line;
 
             while((line=br.readLine())!=null){
@@ -34,5 +36,6 @@ public class CountWords {
         CountWords countWords = new CountWords();
 
         System.out.println(countWords.countWords("Hachiko","haza","pályaudvar","jó","Hachi"));
+
     }
 }
