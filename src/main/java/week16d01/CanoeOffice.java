@@ -13,10 +13,8 @@ public class CanoeOffice {
 
     public CanoeRental findRentalByName(String name){
         for(CanoeRental canoeRental : rentals){
-            if(canoeRental.getEndTime()==null){
-                if(canoeRental.getName().equals(name)){
-                    return canoeRental;
-                }
+            if(canoeRental.getEndTime()==null && canoeRental.getName().equals(name)){
+                return canoeRental;
             }
         }
         return null;
