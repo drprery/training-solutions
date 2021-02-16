@@ -24,6 +24,7 @@ public class Cruise {
     }
 
     public double getPriceForPassenger(Passenger passenger){
+
         return passenger.getCruiseClass().getValue()*basicPrice;
     }
 
@@ -43,12 +44,7 @@ public class Cruise {
             orderedNames.add(passenger.getName());
         }
 
-        Collections.sort(orderedNames, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o1.compareTo(o2);
-            }
-        });
+        Collections.sort(orderedNames);
 
         return orderedNames;
     }
@@ -57,7 +53,7 @@ public class Cruise {
         double sum = 0.0;
 
         for(Passenger passenger : passengers){
-            sum+=passenger.getCruiseClass().getValue()*basicPrice;
+            sum+=getPriceForPassenger(passenger);
         }
 
         return sum;
