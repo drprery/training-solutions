@@ -1,12 +1,17 @@
 package covid;
 
+import java.time.LocalDate;
+
 public class Citizen {
 
+    private int id;
     private final String fullName;
     private final String zipCode;
     private final int age;
     private final String email;
     private final String ssn;
+    private int numOfVacc;
+    private LocalDate lastVacc;
 
     public Citizen(String fullName, String zipCode, int age, String email, String ssn) {
         CitizenDao dao = new CitizenDao();
@@ -37,6 +42,40 @@ public class Citizen {
         this.ssn = ssn.trim();
     }
 
+    public Citizen(int id, String fullName, String zipCode, int age, String email, String ssn, int numOfVacc, LocalDate lastVacc) {
+        CitizenDao dao = new CitizenDao();
+        Validator validator = new Validator();
+
+        this.id = id;
+
+        if(validator.isValidFullName(fullName)) {
+            this.fullName = fullName.trim();
+        } else throw new IllegalArgumentException("Name must not be empty!");
+
+        if (!validator.isValidZipCode(zipCode) || dao.getSettlementsByZip(zipCode).isEmpty()) {
+            throw new IllegalArgumentException("ZIP Code error: must be 4 characters or the city not found in the database!");
+        }
+        this.zipCode = zipCode.trim();
+
+        if (!validator.isValidAge(age)) {
+            throw new IllegalArgumentException("Age must be between 10 and 150!");
+        }
+        this.age = age;
+
+        if (!validator.isValidEmail(email)) {
+            throw new IllegalArgumentException("Not valid email address!");
+        }
+        this.email = email.trim();
+
+        if (!validator.isValidSsn(ssn.trim())) {
+            throw new IllegalArgumentException("SSN number is non valid!");
+        }
+        this.ssn = ssn.trim();
+
+        this.numOfVacc = numOfVacc;
+        this.lastVacc = lastVacc;
+    }
+
     public String getFullName() {
         return fullName;
     }
@@ -55,5 +94,17 @@ public class Citizen {
 
     public String getSsn() {
         return ssn;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public int getNumOfVacc() {
+        return numOfVacc;
+    }
+
+    public LocalDate getLastVacc() {
+        return lastVacc;
     }
 }

@@ -111,14 +111,15 @@ public class CovidMain {
         System.out.println("Kérem adja meg a mentendő file nevét: ");
         String path = scanner.nextLine();
 
-        List<ExtendedCitizen> citizens = new ArrayList<>();
+        List<Citizen> citizens = new ArrayList<>();
         try(Connection conn = citizenDao.getDataSource().getConnection();
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM `citizens` WHERE `zip` = ? ORDER BY `age`, `name`;")){
                 ps.setString(1, zip);
                 ResultSet rs = ps.executeQuery();
 
                 while(rs.next()){
-                    citizens.add(new ExtendedCitizen(rs.getString("citizen_name"),
+                    citizens.add(new Citizen(rs.getInt(("id")),
+                            rs.getString("citizen_name"),
                             rs.getString("zip"),
                             rs.getInt("age"),
                             rs.getString("email"),
@@ -133,7 +134,7 @@ public class CovidMain {
                 try(BufferedWriter bw = Files.newBufferedWriter(Path.of(path))){
                     bw.write("Időpont;Név;Irányítószám;Életkor;E-mail cím;TAJ szám\n");
 
-                    for(ExtendedCitizen citizen : citizens){
+                    for(Citizen citizen : citizens){
                         if(numOfPerson<16 && citizen.getNumOfVacc()==0 ||
                                 (citizen.getNumOfVacc()==1 && citizen.getLastVacc().plusDays(15).isBefore(LocalDate.now()))){
                             numOfPerson++;
@@ -157,7 +158,16 @@ public class CovidMain {
     }
 
     private void vaccination(){
+        Scanner scanner = new Scanner(System.in);
+        Validator validator = new Validator();
 
+        System.out.print("\n4. Írja be a TAJ számot!!");
+        String ssn = scanner.nextLine();
+        while (!validator.isValidSsn(ssn)) {
+            ssn = scanner.nextLine();
+        }
+        scanner.nextLine();
+        citizenDao.vaccination(ssn);
     }
 
     private void failedVaccination(){
@@ -165,3 +175,6 @@ public class CovidMain {
     }
 
 }
+
+
+

@@ -1,7 +1,7 @@
 CREATE TABLE `vaccinations` (
 	`vaccination_id` BIGINT(8) UNSIGNED NOT NULL AUTO_INCREMENT,
 	`citizen_id` BIGINT(8) UNSIGNED NOT NULL,
-	`vaccination_date` DATETIME NOT NULL,
+	`vaccination_date` DATE NOT NULL,
 	`status` VARCHAR(10) NULL DEFAULT NULL COLLATE 'utf8_hungarian_ci',
 	`note` VARCHAR(200) NULL DEFAULT NULL COLLATE 'utf8_hungarian_ci',
 	`vaccination_type` VARCHAR(20) NULL DEFAULT NULL COLLATE 'utf8_hungarian_ci',
