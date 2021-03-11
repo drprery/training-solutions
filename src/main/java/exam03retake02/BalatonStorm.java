@@ -21,9 +21,7 @@ public class BalatonStorm {
             while((line=reader.readLine())!=null){
                 if(line.contains("allomas")){
                     allomas=line.substring(line.indexOf(": ")+3,line.length()-2);
-                    for(int i=1; i<=4; i++){
-                        line=reader.readLine();
-                    }
+                    line = skipLines(reader);
                     level=Integer.parseInt(line.substring(line.indexOf(": ")+2,line.length()-1));
                     if(level>=3){
                         stations.add(allomas);
@@ -39,5 +37,15 @@ public class BalatonStorm {
         Collections.sort(stations, huCollator);
 
         return stations;
+    }
+
+    private String skipLines(BufferedReader reader) throws IOException {
+        String line = null;
+
+        for(int i=1; i<=4; i++){
+            line = reader.readLine();
+        }
+
+        return line;
     }
 }
