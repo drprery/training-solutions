@@ -1,5 +1,11 @@
 package covid;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.service.ServiceRegistry;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,20 +24,24 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CovidMain {
+
+
     private boolean quit;
     private CitizenDao citizenDao = new CitizenDao();
 
     public CovidMain(){
+
         run();
     }
 
     public static void main(String[] args) {
-        CovidMain covidMain = new CovidMain();
 
+        CovidMain covidMain = new CovidMain();
         covidMain.run();
     }
 
     public void run(){
+
         while(!quit){
             printMenu();
             select();
@@ -87,7 +97,14 @@ public class CovidMain {
         email = Registration.emailInput();
         ssn = Registration.ssnInput();
 
-        Citizen citizen = new Citizen(name, zip, age, email, ssn);
+        //Citizen citizen = new Citizen(name, zip, age, email, ssn);
+        Citizen citizen = new Citizen();
+        citizen.setFullName(name);
+        citizen.setZipCode(zip);
+        citizen.setAge(age);
+        citizen.setEmail(email);
+        citizen.setSsn(ssn);
+
         System.out.println(citizenDao.uploadCitizenToDb(citizen)+" sikeresen regisztrálva!");
     }
 

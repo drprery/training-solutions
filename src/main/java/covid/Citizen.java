@@ -1,49 +1,41 @@
 package covid;
 
 import java.time.LocalDate;
+import javax.persistence.*;
 
+@Entity
+@Table(name="citizens")
 public class Citizen {
 
-    private int id;
-    private final String fullName;
-    private final String zipCode;
-    private final int age;
-    private final String email;
-    private final String ssn;
-    private int numOfVacc;
-    private LocalDate lastVacc;
+    @Id
+    @Column(name = "citizen_id", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
 
-    public Citizen(String fullName, String zipCode, int age, String email, String ssn) {
-        CitizenDao dao = new CitizenDao();
-        Validator validator = new Validator();
+    @Column(name="citizen_name")
+    private String fullName;
 
-        if(validator.isValidFullName(fullName)) {
-            this.fullName = fullName.trim();
-        } else throw new IllegalArgumentException("Name must not be empty!");
+    @Column(name="zip")
+    private String zipCode;
 
-        if (!validator.isValidZipCode(zipCode) || dao.getSettlementsByZip(zipCode).isEmpty()) {
-            throw new IllegalArgumentException("ZIP Code error: must be 4 characters or the city not found in the database!");
-        }
-        this.zipCode = zipCode.trim();
+    @Column(name="age")
+    private int age;
 
-        if (!validator.isValidAge(age)) {
-            throw new IllegalArgumentException("Age must be between 10 and 150!");
-        }
-        this.age = age;
+    @Column(name="email")
+    private String email;
 
-        if (!validator.isValidEmail(email)) {
-            throw new IllegalArgumentException("Not valid email address!");
-        }
-        this.email = email.trim();
+    @Column(name="taj")
+    private String ssn;
 
-        if (!validator.isValidSsn(ssn.trim())) {
-            throw new IllegalArgumentException("SSN number is non valid!");
-        }
-        this.ssn = ssn.trim();
-    }
+    @Column(name="number_of_vaccination")
+    private int numOfVacc = 0;
 
-    public Citizen(int id, String fullName, String zipCode, int age, String email, String ssn, int numOfVacc, LocalDate lastVacc) {
-        CitizenDao dao = new CitizenDao();
+    @Column(name="last_vaccination")
+    private LocalDate lastVacc = null;
+
+
+    public Citizen() {
+        /*CitizenDao dao = new CitizenDao();
         Validator validator = new Validator();
 
         this.id = id;
@@ -73,7 +65,7 @@ public class Citizen {
         this.ssn = ssn.trim();
 
         this.numOfVacc = numOfVacc;
-        this.lastVacc = lastVacc;
+        this.lastVacc = lastVacc;*/
     }
 
     public String getFullName() {
@@ -106,5 +98,33 @@ public class Citizen {
 
     public LocalDate getLastVacc() {
         return lastVacc;
+    }
+
+    public void setFullName(String fullName){
+        this.fullName = fullName;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setSsn(String ssn) {
+        this.ssn = ssn;
+    }
+
+    public void setNumOfVacc(int numOfVacc) {
+        this.numOfVacc = numOfVacc;
+    }
+
+    public void setLastVacc(LocalDate lastVacc) {
+        this.lastVacc = lastVacc;
     }
 }

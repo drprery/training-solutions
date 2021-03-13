@@ -1,5 +1,11 @@
 package covid;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.service.ServiceRegistry;
 import org.mariadb.jdbc.MariaDbDataSource;
 
 import java.io.BufferedReader;
@@ -16,7 +22,25 @@ public class CitizenDao {
     private MariaDbDataSource dataSource = new MariaDbDataSource();
     private Validator validator = new Validator();
 
+    private StandardServiceRegistryBuilder standardRegistry
+            = (StandardServiceRegistryBuilder) new StandardServiceRegistryBuilder()
+            .configure()
+            .build();
+
+    private MetadataSources sources = new MetadataSources((ServiceRegistry) standardRegistry);
+    private Metadata metadata;
+    private SessionFactory sessionFactory;
+
+
     public CitizenDao() {
+
+        // Here we tell Hibernate that we annotated our User class
+        sources.addAnnotatedClass( Citizen.class );
+        metadata = sources.buildMetadata();
+
+        // This is what we want, a SessionFactory!
+        sessionFactory = metadata.buildSessionFactory();
+
         try {
             dataSource.setUrl("jdbc:mariadb://localhost:3306/covid?useUnicode=true");
             dataSource.setUser("root");
@@ -55,7 +79,12 @@ public class CitizenDao {
     }
 
     public long uploadCitizenToDb(Citizen citizen) {
-            try(Connection conn = dataSource.getConnection();
+        Session session = sessionFactory.openSession();
+
+        // this line will generate and execute the "insert into users" sql for you!
+        session.save( citizen );
+
+            /*try(Connection conn = dataSource.getConnection();
                 PreparedStatement ps = conn.prepareStatement(
                         "INSERT INTO `citizens`(`citizen_name`, `zip`, `age`, `email`, `taj`) VALUES (?, ?, ?, ?, ?);",
                         Statement.RETURN_GENERATED_KEYS
@@ -73,7 +102,7 @@ public class CitizenDao {
 
             } catch (SQLException sqle) {
                 throw new IllegalStateException("Can not insert to DB!", sqle);
-            }
+            }*/
     }
 
     public boolean isSsnRegistered(String ssn){
