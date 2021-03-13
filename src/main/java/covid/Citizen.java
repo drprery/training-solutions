@@ -34,11 +34,11 @@ public class Citizen {
     private LocalDate lastVacc = null;
 
 
-    public Citizen() {
-        /*CitizenDao dao = new CitizenDao();
-        Validator validator = new Validator();
+    public Citizen() {}
 
-        this.id = id;
+    public Citizen(String name, String zip, int age, String email, String taj){
+        Validator validator = new Validator();
+        CitizenDao dao = new CitizenDao();
 
         if(validator.isValidFullName(fullName)) {
             this.fullName = fullName.trim();
@@ -64,8 +64,6 @@ public class Citizen {
         }
         this.ssn = ssn.trim();
 
-        this.numOfVacc = numOfVacc;
-        this.lastVacc = lastVacc;*/
     }
 
     public String getFullName() {

@@ -39,23 +39,30 @@ public class CitizenDao {
         sources.addAnnotatedClass( Citizen.class );
         metadata = sources.buildMetadata();
 
-        // This is what we want, a SessionFactory!
+        // This is what we want, a SessionFactory
         sessionFactory = metadata.buildSessionFactory();
-
-        /*try {
-            dataSource.setUrl("jdbc:mariadb://localhost:3306/covid?useUnicode=true");
-            dataSource.setUser("root");
-            dataSource.setPassword("root74");
-        } catch (SQLException se) {
-            throw new IllegalStateException("Can not connect to database!", se);
-        }*/
-
     }
 
     public List<String> getSettlementsByZip(String zipCode) {
-        Dbase dbase = new Dbase(dataSource);
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        List<String> settlements = new ArrayList<>();
 
-        return dbase.queryStringColumn("SELECT `settlement` FROM `postcodes` WHERE `zip` = ? ORDER BY `settlement`", zipCode);
+        try{
+            tx = session.beginTransaction();
+            settlements = session.createQuery("SELECT `settlement` FROM `postcodes` WHERE `zip`= zipCode ORDER BY `settlement`").list();
+            tx.commit();
+        } catch (Exception e){
+            if (tx!=null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return settlements;
+
     }
 
     public String uploadCitizensFromFile(String fileName) {
@@ -86,8 +93,6 @@ public class CitizenDao {
 
         try{
             tx = session.beginTransaction();
-
-            // this line will generate and execute the "insert into users" sql for you!
             id = (long) session.save( citizen );
             tx.commit();
         } catch (Exception e){
@@ -100,42 +105,30 @@ public class CitizenDao {
         }
 
         return id;
-            /*try(Connection conn = dataSource.getConnection();
-                PreparedStatement ps = conn.prepareStatement(
-                        "INSERT INTO `citizens`(`citizen_name`, `zip`, `age`, `email`, `taj`) VALUES (?, ?, ?, ?, ?);",
-                        Statement.RETURN_GENERATED_KEYS
-                )) {
-                ps.setString(1, citizen.getFullName());
-                ps.setString(2, citizen.getZipCode());
-                ps.setInt(3, citizen.getAge());
-                ps.setString(4, citizen.getEmail());
-                ps.setString(5, citizen.getSsn());
-
-                ps.executeUpdate();
-                ResultSet rs = ps.getGeneratedKeys();
-                rs.next();
-                return rs.getLong(1);
-
-            } catch (SQLException sqle) {
-                throw new IllegalStateException("Can not insert to DB!", sqle);
-            }*/
     }
 
     public boolean isSsnRegistered(String ssn){
-        try(Connection conn = dataSource.getConnection();
-            PreparedStatement ps = conn.prepareStatement(
-                    "SELECT `citizen_id` FROM `citizens` WHERE `taj` = ?;"))
-        {
-            ps.setString(1, ssn);
-            ResultSet rs = ps.executeQuery();
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        List<Citizen> citizens = new ArrayList<>();
 
-            if(rs.next()){
-                return true;
-            } else {
-                return false;
+        try{
+            tx = session.beginTransaction();
+            citizens = session.createQuery("FROM `citizens` WHERE `taj`= ssn").list();
+            tx.commit();
+        } catch (Exception e){
+            if (tx!=null) {
+                tx.rollback();
             }
-        } catch (SQLException sqle) {
-            throw new IllegalStateException("Error in connection of the DB!", sqle);
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        if(citizens.size()>0){
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -151,24 +144,28 @@ public class CitizenDao {
     }
 
     public Citizen selectCitizenBySsn(String ssn) {
-        try (PreparedStatement stmt = dataSource.getConnection().prepareStatement("select * from citizens where ssn = ?")) {
-            stmt.setString(1, ssn);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    int id = rs.getInt("citizen_id");
-                    String name = rs.getString("citizen_name");
-                    String zipCode = rs.getString("zip");
-                    int age = rs.getInt("age");
-                    String email = rs.getString("email");
-                    int vaccNumber = rs.getInt("number_of_vaccination");
-                    LocalDate dateTime = rs.getObject("last_vaccination", LocalDate.class);
-                    return new Citizen(id, name, zipCode, age, email, ssn, vaccNumber, dateTime);
-                }
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        List<Citizen> citizens = new ArrayList<>();
+
+        try{
+            tx = session.beginTransaction();
+            citizens = session.createQuery("FROM `citizens` WHERE `taj`= ssn").list();
+            tx.commit();
+        } catch (Exception e){
+            if (tx!=null) {
+                tx.rollback();
             }
-        } catch (SQLException se) {
-            throw new IllegalStateException("Connection failed", se);
+            e.printStackTrace();
+        } finally {
+            session.close();
         }
-        return null;
+
+        if(citizens.size()>0) {
+            return citizens.get(0);
+        } else {
+            return null;
+        }
     }
 
     public String selectAndPrintLineCityByZipCode(String zipCode) {
