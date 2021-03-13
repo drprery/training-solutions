@@ -97,7 +97,7 @@ public class CovidMain {
         email = Registration.emailInput();
         ssn = Registration.ssnInput();
 
-        //Citizen citizen = new Citizen(name, zip, age, email, ssn);
+
         Citizen citizen = new Citizen();
         citizen.setFullName(name);
         citizen.setZipCode(zip);

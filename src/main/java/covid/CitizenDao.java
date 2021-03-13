@@ -2,6 +2,7 @@ package covid;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -41,13 +42,13 @@ public class CitizenDao {
         // This is what we want, a SessionFactory!
         sessionFactory = metadata.buildSessionFactory();
 
-        try {
+        /*try {
             dataSource.setUrl("jdbc:mariadb://localhost:3306/covid?useUnicode=true");
             dataSource.setUser("root");
             dataSource.setPassword("root74");
         } catch (SQLException se) {
             throw new IllegalStateException("Can not connect to database!", se);
-        }
+        }*/
 
     }
 
@@ -80,10 +81,25 @@ public class CitizenDao {
 
     public long uploadCitizenToDb(Citizen citizen) {
         Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        long id = 0;
 
-        // this line will generate and execute the "insert into users" sql for you!
-        session.save( citizen );
+        try{
+            tx = session.beginTransaction();
 
+            // this line will generate and execute the "insert into users" sql for you!
+            id = (long) session.save( citizen );
+            tx.commit();
+        } catch (Exception e){
+            if (tx!=null) {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        } finally {
+            session.close();
+        }
+
+        return id;
             /*try(Connection conn = dataSource.getConnection();
                 PreparedStatement ps = conn.prepareStatement(
                         "INSERT INTO `citizens`(`citizen_name`, `zip`, `age`, `email`, `taj`) VALUES (?, ?, ?, ?, ?);",
