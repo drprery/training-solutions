@@ -66,6 +66,41 @@ public class Citizen {
 
     }
 
+    public Citizen(int id, String name, String zip, int age, String email, String taj, int numOfVacc, LocalDate lastVacc){
+        Validator validator = new Validator();
+        CitizenDao dao = new CitizenDao();
+
+        this.id = id;
+
+        if(validator.isValidFullName(fullName)) {
+            this.fullName = fullName.trim();
+        } else throw new IllegalArgumentException("Name must not be empty!");
+
+        if (!validator.isValidZipCode(zipCode) || dao.getSettlementsByZip(zipCode).isEmpty()) {
+            throw new IllegalArgumentException("ZIP Code error: must be 4 characters or the city not found in the database!");
+        }
+        this.zipCode = zipCode.trim();
+
+        if (!validator.isValidAge(age)) {
+            throw new IllegalArgumentException("Age must be between 10 and 150!");
+        }
+        this.age = age;
+
+        if (!validator.isValidEmail(email)) {
+            throw new IllegalArgumentException("Not valid email address!");
+        }
+        this.email = email.trim();
+
+        if (!validator.isValidSsn(ssn.trim())) {
+            throw new IllegalArgumentException("SSN number is non valid!");
+        }
+        this.ssn = ssn.trim();
+
+        this.lastVacc = lastVacc;
+        this.numOfVacc = numOfVacc;
+
+    }
+
     public String getFullName() {
         return fullName;
     }
